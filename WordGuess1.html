@@ -16,75 +16,78 @@
 
     <script type="text/javascript">
 
-    var alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
-    var words = ['m o n k e y', 'd o l p h i n', 'f o x', 'g i r a f f e', 't i g e r'];
+    var words = ["monkey", "dolphin", "fox", "giraffe", "tiger", "gorilla", "armadillo", "lion"];
+    var userGuess;
     var wordPicked;
-    var splitWord;
-    var check;
-    
-    var wordPicked = words[Math.floor(Math.random() * words.length)];
-    var wordDashed = wordPicked.replace(/[a-zA-Z]/g , '-');
-        console.log("Computer Choice: " + wordPicked);
-   
-
+    var wordDashed = [];
+    var guessList = [];
     var wins = 0;
         wins = document.getElementById('wins').innerHTML = (wins);
     var guesses = 12;
         guesses = document.getElementById('guesses-left').innerHTML = (guesses);
     var guessList = [];
     
-    function reset() {
+var audio = new Audio('monkey.m4a');
+    // audio.play();
+
+function empty() {
+    wordDashed = [];
+}
+
+function dashedName() {
+    wordPicked = words[Math.floor(Math.random() * words.length)];
+    console.log(wordPicked)
+   for (i = 0; i < wordPicked.length; i++) {
+       wordDashed[i] = '_';
+   }
+   document.getElementById('theWord').textContent = wordDashed.join(' ');
+}
+
+function checkMyLetter(userGuess) {
+   
+   for (i = 0; i < wordPicked.length; i++) {
+       if (userGuess === wordPicked[i]) {
+           wordDashed[i] = userGuess;
+           console.log(wordPicked)
+           console.log(wordDashed.join(' '))
+           console.log(wordDashed.join(' ') === wordPicked);
+       } 
+   }     
+   document.getElementById('theWord').textContent = wordDashed.join(' ');
+}
+
+dashedName();
+    
+function reset() {
         guesses = 12;
+        dashedName();
         guessList = [];
-        wordPicked = words[Math.floor(Math.random() * words.length)];
-        console.log("Computer Choice: " + wordPicked);
 }
 
-function splitMyWord(){
-    var splitWord = wordPicked.split(' ');
-    console.log(splitWord);
-    return splitWord;
-}
-splitMyWord();
-
-// function checkLetterPresence() {
-//     var check = splitWord.includes("a");
-//     console.log(check);
-// }
-// checkLetterPresence();
-// if (splitWord.indexOf(userGuess) > -1)
-// {
-//   alert("hello found inside your_string");
-// }
-if (splitWord.includes('a'))
-{
-  alert("hello found inside your_string");
-}
 document.onkeyup = function (event) {
         var userGuess = event.key;
         guessList.push(userGuess);
-     
-if (splitWord.includes("a"))
-{
-  alert("hello found inside your_string");
+        
+        checkMyLetter(userGuess);
+
+if(wordPicked.includes(wordDashed.join('')) === true) {
+        wins++;
+        empty();
+        reset();   
+}else{
+    guesses--;
 }
-    if(userGuess === wordPicked) {
-            wins++;
-            reset();
-         
-    }else{
-        guesses--;
-    }
-   
-    if(guesses === 0){
+
+if(guesses === 0){
+        empty();
         reset();    
-    }
+}
+
     document.getElementById('wins').innerHTML = (wins);
-    document.getElementById('theWord').innerHTML = (wordDashed);
     document.getElementById('guesses-left').innerHTML = (guesses);
     document.getElementById('typed-letters').innerHTML = (guessList.join(', '));
 }  
-
-    </script>
+    
+</script>
 </body>
 </html>
